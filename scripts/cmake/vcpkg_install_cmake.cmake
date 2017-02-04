@@ -19,6 +19,8 @@ function(vcpkg_install_cmake)
     
     if(EXISTS ${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-rel/build.ninja)
         set(BUILD_ARGS -v) # verbose output
+    elseif(EXISTS ${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-rel/Makefile)
+        set(BUILD_ARGS "")
     else()
         set(BUILD_ARGS ${MSVC_EXTRA_ARGS})
     endif()
