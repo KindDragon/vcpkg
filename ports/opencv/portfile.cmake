@@ -3,6 +3,9 @@ if (VCPKG_LIBRARY_LINKAGE STREQUAL static)
     set(VCPKG_LIBRARY_LINKAGE dynamic)
 endif()
 include(vcpkg_common_functions)
+
+set(VCPKG_PLATFORM_TOOLSET "v140") # Force VS2015 because VS2017 compiler return internal error
+
 set(SOURCE_PATH ${CURRENT_BUILDTREES_DIR}/src/opencv-3.2.0)
 vcpkg_download_distfile(ARCHIVE
     URLS "https://github.com/opencv/opencv/archive/3.2.0.zip"
@@ -21,17 +24,18 @@ file(REMOVE_RECURSE ${SOURCE_PATH}/3rdparty/libjpeg ${SOURCE_PATH}/3rdparty/libp
 
 # Uncomment the following lines and the lines under OPTIONS to build opencv_contrib
 # Important: after uncommenting you've add protobuf dependency within CONTROL file
-#SET(CONTRIB_SOURCE_PATH ${CURRENT_BUILDTREES_DIR}/src/opencv_contrib-3.2.0)
-#vcpkg_download_distfile(CONTRIB_ARCHIVE
-#    URLS "https://github.com/opencv/opencv_contrib/archive/3.2.0.zip"
-#    FILENAME "opencv_contrib-3.2.0.zip"
-#    SHA512 da6cda7a7ae1d722967e18f9b8d60895b93bbc3664dfdb1645cb4d8b337a9c4207b9073fd546a596c48a489f92d15191aa34c7c607167b536fbe4937b8424b43
-#)
-#vcpkg_extract_source_archive(${CONTRIB_ARCHIVE})
-#vcpkg_apply_patches(
-#    SOURCE_PATH ${CONTRIB_SOURCE_PATH}
-#    PATCHES "${CMAKE_CURRENT_LIST_DIR}/open_contrib-remove-waldboost.patch"
-#)
+SET(CONTRIB_SOURCE_PATH ${CURRENT_BUILDTREES_DIR}/src/opencv_contrib-3.2.0)
+vcpkg_download_distfile(CONTRIB_ARCHIVE
+    URLS "https://github.com/opencv/opencv_contrib/archive/3.2.0.zip"
+    FILENAME "opencv_contrib-3.2.0.zip"
+    SHA512 da6cda7a7ae1d722967e18f9b8d60895b93bbc3664dfdb1645cb4d8b337a9c4207b9073fd546a596c48a489f92d15191aa34c7c607167b536fbe4937b8424b43
+)
+vcpkg_extract_source_archive(${CONTRIB_ARCHIVE})
+vcpkg_apply_patches(
+    SOURCE_PATH ${CONTRIB_SOURCE_PATH}
+    PATCHES "${CMAKE_CURRENT_LIST_DIR}/open_contrib-remove-waldboost.patch"
+    PATCHES "${CMAKE_CURRENT_LIST_DIR}/fix_contrib.patch"
+)
 
 vcpkg_configure_cmake(
     SOURCE_PATH ${SOURCE_PATH}
@@ -59,7 +63,7 @@ vcpkg_configure_cmake(
         -DWITH_CUBLAS=OFF
         -DWITH_OPENCLAMDBLAS=OFF
         -DWITH_LAPACK=OFF
-        #-DOPENCV_EXTRA_MODULES_PATH=${CONTRIB_SOURCE_PATH}/modules # uncomment the following 3 lines to build opencv_contrib modules
+        -DOPENCV_EXTRA_MODULES_PATH=${CONTRIB_SOURCE_PATH}/modules # uncomment the following 3 lines to build opencv_contrib modules
         #-DBUILD_PROTOBUF=OFF
         #-DUPDATE_PROTO_FILES=ON
     OPTIONS_DEBUG

@@ -1,0 +1,10 @@
+--- a/modules/sfm/src/libmv_light/libmv/multiview/CMakeLists.txt	Mon Jul 10 17:23:03 2017
++++ b/modules/sfm/src/libmv_light/libmv/multiview/CMakeLists.txt	Mon Jul 10 15:29:46 2017
+@@ -13,6 +13,7 @@
+                   triangulation.cc
+                   twoviewtriangulation.cc)
+ 
++add_definitions(-D_USE_MATH_DEFINES)
+ # define the header files (make the headers appear in IDEs.)
+ FILE(GLOB MULTIVIEW_HDRS *.h)
+ ADD_LIBRARY(multiview STATIC ${MULTIVIEW_SRC} ${MULTIVIEW_HDRS})
