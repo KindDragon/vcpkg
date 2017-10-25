@@ -1,0 +1,14 @@
+--- a/src/libOpenImageIO/CMakeLists2.txt	Wed Oct 25 02:04:23 2017
++++ b/src/libOpenImageIO/CMakeLists.txt	Wed Oct 25 02:17:41 2017
+@@ -191,6 +191,11 @@
+     set_target_properties (OpenImageIO PROPERTIES LINK_FLAGS ${EXTRA_DSO_LINK_ARGS})
+ endif()
+ 
++# Enable "/bigobj", because of imagebufalgo_pixelmath.cpp
++if (MSVC)
++    add_definitions (/bigobj)
++endif (MSVC)
++
+ oiio_install_targets (OpenImageIO)
+ 
+ 

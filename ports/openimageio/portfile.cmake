@@ -3,9 +3,17 @@ include(vcpkg_common_functions)
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO OpenImageIO/oiio
-    REF Release-1.7.15
-    SHA512 5b83961a77de36082e0a3abeac8015f9455504680d7437777524a9ac17ac7994df2a2ad1af86a884cf17c1afcd71a36a30e24711cba8d8a30511c05e36d7fadc
+    REF Release-1.8.5
+    SHA512 439b2ea3e741690ea71b8f0cb6cdfd9627ceff436e9f26b69a621fe0ff7a6e64c8ba15a1ae5f909edb142334f0c8cda53def56eac56afa89699b8c806aa4a072
     HEAD_REF master
+)
+
+vcpkg_apply_patches(
+    SOURCE_PATH
+        ${SOURCE_PATH}
+    PATCHES
+        ${CMAKE_CURRENT_LIST_DIR}/fix-cmakelists.diff
+        ${CMAKE_CURRENT_LIST_DIR}/fix-bigobj.diff
 )
 
 if(VCPKG_LIBRARY_LINKAGE STREQUAL static)
@@ -22,7 +30,6 @@ vcpkg_configure_cmake(
     OPTIONS
         -DOIIO_BUILD_TOOLS=OFF
         -DOIIO_BUILD_TESTS=OFF
-        -DHIDE_SYMBOLS=ON
         -DUSE_FFMPEG=OFF
         -DUSE_FIELD3D=OFF
         -DUSE_FREETYPE=OFF
@@ -44,8 +51,8 @@ vcpkg_install_cmake()
 vcpkg_copy_pdbs()
 
 # Clean
-file(REMOVE_RECURSE ${CURRENT_PACKAGES_DIR}/doc)
-file(REMOVE_RECURSE ${CURRENT_PACKAGES_DIR}/debug/doc)
+file(REMOVE_RECURSE ${CURRENT_PACKAGES_DIR}/share/doc)
+file(REMOVE_RECURSE ${CURRENT_PACKAGES_DIR}/debug/share)
 file(REMOVE_RECURSE ${CURRENT_PACKAGES_DIR}/debug/include)
 
 # Handle copyright
