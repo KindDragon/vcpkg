@@ -1,0 +1,12 @@
+--- a/CMakeLists.txt	Mon Jan 02 02:37:37 2017
++++ b/CMakeLists.txt	Fri Oct 27 03:14:10 2017
+@@ -2,6 +2,9 @@
+ 
+ project(ImageLib)
+ 
++string(REPLACE "/utf-8" "" CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /source-charset:.1252")
++
+ add_subdirectory(src-IL)
+ add_subdirectory(src-ILU)
+ add_subdirectory(src-ILUT)
