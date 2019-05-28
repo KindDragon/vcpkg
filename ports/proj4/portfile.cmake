@@ -1,18 +1,15 @@
 include(vcpkg_common_functions)
-set(SOURCE_PATH ${CURRENT_BUILDTREES_DIR}/src/proj-4.9.3)
-vcpkg_download_distfile(ARCHIVE
-    URLS "http://download.osgeo.org/proj/proj-4.9.3.zip"
-    FILENAME "proj-4.9.3.zip"
-    SHA512 c9703008cd1f75fe1239b180158e560b9b88ae2ffd900b72923c716908eb86d1abbc4230647af5e3131f8c34481bdc66b03826d669620161ffcfbe67801cb631
-)
-vcpkg_extract_source_archive(${ARCHIVE})
 
-vcpkg_apply_patches(
-    SOURCE_PATH ${SOURCE_PATH}/
+vcpkg_from_github(
+    OUT_SOURCE_PATH SOURCE_PATH
+    REPO OSGeo/proj.4
+    REF 6.1.0
+    SHA512 c9703008cd1f75fe1239b180158e560b9b88ae2ffd900b72923c716908eb86d1abbc4230647af5e3131f8c34481bdc66b03826d669620161ffcfbe67801cb631
+    HEAD_REF master
     PATCHES
-    ${CMAKE_CURRENT_LIST_DIR}/0001-CMake-add-detection-of-recent-visual-studio-versions.patch
-    ${CMAKE_CURRENT_LIST_DIR}/0002-CMake-fix-error-by-only-setting-properties-for-targe.patch
-    ${CMAKE_CURRENT_LIST_DIR}/0003-CMake-configurable-cmake-config-install-location.patch
+        0001-CMake-add-detection-of-recent-visual-studio-versions.patch
+        0002-CMake-fix-error-by-only-setting-properties-for-targe.patch
+        0003-CMake-configurable-cmake-config-install-location.patch
 )
 
 if (VCPKG_LIBRARY_LINKAGE STREQUAL dynamic)
